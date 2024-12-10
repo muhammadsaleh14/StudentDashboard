@@ -1,2 +1,4 @@
 venv
 next_student/node_modules
+next_student/.next/
+next_student/out/
