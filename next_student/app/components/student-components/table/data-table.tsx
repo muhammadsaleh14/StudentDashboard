@@ -64,7 +64,6 @@ export function DataTable<TData, TValue>({
           onChange={(e) => table.setGlobalFilter(String(e.target.value))}
           className="max-w-sm"
         />
-        <AddStudentDialog />
       </div>
       <div className="rounded-md border">
         <Table>

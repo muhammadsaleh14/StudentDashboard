@@ -2,8 +2,8 @@ from rest_framework.decorators import action
 from rest_framework import viewsets,status
 from rest_framework.response import Response
 from django.db.models import Avg
-from .models import Student, Course, Enrollment, Attendance, Grade
-from .serializers import StudentSerializer, CourseSerializer,EnrollmentSerializer,AttendanceSerializer, GradeSerializer
+from .models import Student, Course, Enrollment, Attendance, Grade, Department
+from .serializers import StudentSerializer, CourseSerializer,EnrollmentSerializer,AttendanceSerializer, GradeSerializer, DepartmentSerializer
 
 
 class StudentViewSet(viewsets.ModelViewSet):
@@ -80,3 +80,10 @@ class AttendanceViewSet(viewsets.ModelViewSet):
 class GradeViewSet(viewsets.ModelViewSet):
     queryset = Grade.objects.all()
     serializer_class = GradeSerializer
+
+
+
+class DepartmentViewSet(viewsets.ModelViewSet):
+    queryset = Department.objects.all()
+    serializer_class = DepartmentSerializer
+

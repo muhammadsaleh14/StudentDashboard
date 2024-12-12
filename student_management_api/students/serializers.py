@@ -38,7 +38,8 @@ class CourseSerializer(serializers.ModelSerializer):
         return GradeSerializer(grades_records, many=True).data
 
 class StudentSerializer(serializers.ModelSerializer):
-    department = DepartmentSerializer()  # Include department details
+    # department = DepartmentSerializer()  # Include department details
+    department = serializers.PrimaryKeyRelatedField(queryset=Department.objects.all())
     courses = serializers.SerializerMethodField()  # We'll add this method
 
     class Meta:

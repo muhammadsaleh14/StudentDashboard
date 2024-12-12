@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -14,14 +14,22 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { DatePickerDemo } from "@/app/components/ui/DatePickerDemo"; // Importing your DatePicker
+import { Department, Student } from "@/app/interfaces/models";
+import { DepartmentCombobox } from "./DepartmentCombobox";
 
-export function AddStudentDialog() {
+interface AddStudentDialogInterface {
+  setStudentAdded: (student: Student) => void;
+}
+export function AddStudentDialog({
+  setStudentAdded,
+}: AddStudentDialogInterface) {
   // State management for form inputs
   const [name, setName] = useState("");
   const [cnic, setCnic] = useState("");
-  const [department, setDepartment] = useState("");
+  const [department, setDepartment] = useState<Department | null>();
   const [dateOfBirth, setDateOfBirth] = useState<Date | undefined>(undefined);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [departments, setDepartments] = useState<Department[]>([]);
 
   // Handle image file selection
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,15 +41,82 @@ export function AddStudentDialog() {
     }
   };
 
-  const handleSubmit = () => {
-    // Log all values to the console on submit
-    console.log({
-      name,
-      cnic,
-      department,
-      dateOfBirth,
-      imageUrl,
-    });
+  const handleSubmit = async () => {
+    try {
+      if (!department) {
+        return;
+      }
+      // Create FormData instance
+      const formData = new FormData();
+
+      // const student = new Student();
+      // Append form fields
+      formData.append("name", name);
+      formData.append("cnic", cnic);
+      formData.append("department", department.id.toString()); // Ensure department is the ID or correct format
+      formData.append(
+        "date_of_birth",
+        dateOfBirth?.toISOString().split("T")[0] || "" // Format date to 'YYYY-MM-DD'
+      );
+
+      // Conditionally append the image file if available
+      if (imageUrl) {
+        const imageFile = await fetch(imageUrl)
+          .then((res) => res.blob())
+          .then(
+            (blob) =>
+              new File([blob], "uploaded-image.jpg", { type: blob.type })
+          );
+        formData.append("image", imageFile);
+      }
+
+      console.log("Data being sent to the backend:", formData);
+
+      // Send POST request to backend
+      const response = await fetch("http://127.0.0.1:8000/api/students/", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        console.error("Response Error:", await response.json());
+        throw new Error("Failed to save student. Please check the input.");
+      }
+
+      const newStudent = await response.json();
+
+      // Log the new student for debugging
+      console.log("Student saved successfully:", newStudent);
+
+      // Reset form fields after successful submission
+      setName("");
+      setCnic("");
+      setDepartment(null);
+      setDateOfBirth(undefined);
+      setImageUrl(null);
+
+      // Optionally: Update the UI (e.g., refresh student list, close dialog, show a success message)
+      alert("Student added successfully!");
+      setStudentAdded(newStudent);
+    } catch (error) {
+      console.error("Error saving student:", error);
+      alert("Failed to save student. Please try again.");
+    }
+  };
+
+  useEffect(() => {
+    fetchDepartments();
+  }, []);
+
+  const fetchDepartments = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/departments/");
+      const data = await response.json(); // Correct invocation of .json()
+      console.log(data);
+      setDepartments(data); // Set the fetched data to state
+    } catch (error) {
+      console.error("Error fetching departments:", error);
+    }
   };
 
   return (
@@ -103,10 +178,7 @@ export function AddStudentDialog() {
               Date of Birth
             </Label>
             <div className="col-span-3">
-              <DatePickerDemo
-                selectedDate={dateOfBirth}
-                onDateChange={setDateOfBirth}
-              />
+              <DatePickerDemo onDateChange={setDateOfBirth} />
             </div>
           </div>
 
@@ -115,12 +187,16 @@ export function AddStudentDialog() {
             <Label htmlFor="department" className="text-right">
               Department
             </Label>
-            <Input
+            <DepartmentCombobox
+              availableDepartments={departments}
+              setDepartment={setDepartment}
+            />
+            {/* <Input
               id="department"
               value={department}
               onChange={(e) => setDepartment(e.target.value)}
               className="col-span-3"
-            />
+            /> */}
           </div>
         </div>
         <DialogFooter>
