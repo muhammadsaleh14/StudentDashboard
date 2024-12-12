@@ -5,7 +5,7 @@ import { Student } from "@/app/interfaces/models";
 
 import { DataTable } from "@/app/components/student-components/table/data-table";
 import { useStudents } from "@/app/provider/students-list-provider";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { AddStudentDialog } from "./AddStudentDialog";
 
 interface StudentsListProps {

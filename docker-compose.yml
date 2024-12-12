@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  backend:
+    build:
+      context: ./student_management_api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./student_management_api:/app
+
+  frontend:
+    build:
+      context: ./next_student
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./next_student:/app
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000

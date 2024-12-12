@@ -38,9 +38,12 @@ class CourseSerializer(serializers.ModelSerializer):
         return GradeSerializer(grades_records, many=True).data
 
 class StudentSerializer(serializers.ModelSerializer):
-    # department = DepartmentSerializer()  # Include department details
-    department = serializers.PrimaryKeyRelatedField(queryset=Department.objects.all())
-    courses = serializers.SerializerMethodField()  # We'll add this method
+    department = serializers.PrimaryKeyRelatedField(
+        queryset=Department.objects.all(),
+        write_only=True,
+        required=False
+    )
+    courses = serializers.SerializerMethodField()
 
     class Meta:
         model = Student
@@ -51,6 +54,19 @@ class StudentSerializer(serializers.ModelSerializer):
         courses = [enrollment.course for enrollment in enrollments]
         return CourseSerializer(courses, many=True).data
 
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        # Include full Department data when retrieving
+        department_data = DepartmentSerializer(instance.department).data
+        representation['department'] = department_data
+        return representation
+
+    def to_internal_value(self, data):
+        internal_value = super().to_internal_value(data)
+        # Only include department_id when creating
+        if 'department' not in data or isinstance(data['department'], dict):
+            internal_value['department'] = data.pop('department', None)
+        return internal_value
 class EnrollmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Enrollment

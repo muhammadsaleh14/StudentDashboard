@@ -55,7 +55,7 @@ export default async function Overview() {
   // Fetch average attendance data
   async function fetchAverageAttendance(): Promise<AverageAttendance[]> {
     const response = await fetch(
-      "http://127.0.0.1:8000/api/courses/average-attendance/"
+      `${process.env.NEXT_PUBLIC_API_URL}/api/courses/average-attendance/`
     );
     const data: AverageAttendance[] = await response.json();
     return data;
@@ -64,7 +64,7 @@ export default async function Overview() {
   // Fetch average grade data
   async function fetchAverageGrade(): Promise<AverageGrade[]> {
     const response = await fetch(
-      "http://127.0.0.1:8000/api/courses/average-grade/"
+      `${process.env.NEXT_PUBLIC_API_URL}/api/courses/average-grade/`
     );
     const data: AverageGrade[] = await response.json();
     return data;
@@ -77,7 +77,7 @@ export default async function Overview() {
   // Fetch total students data
   async function fetchTotalStudents(): Promise<number> {
     const response = await fetch(
-      "http://127.0.0.1:8000/api/students/total-students/"
+      `${process.env.NEXT_PUBLIC_API_URL}/api/students/total-students/`
     );
     const data: total = await response.json();
     return data.count;
@@ -86,7 +86,7 @@ export default async function Overview() {
   // Fetch total courses data
   async function fetchTotalCourses(): Promise<number> {
     const response = await fetch(
-      "http://127.0.0.1:8000/api/courses/total-courses/"
+      `${process.env.NEXT_PUBLIC_API_URL}/api/courses/total-courses/`
     );
     const data: total = await response.json();
     return data.count;

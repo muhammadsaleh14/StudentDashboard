@@ -73,10 +73,13 @@ export function AddStudentDialog({
       console.log("Data being sent to the backend:", formData);
 
       // Send POST request to backend
-      const response = await fetch("http://127.0.0.1:8000/api/students/", {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/students/`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       if (!response.ok) {
         console.error("Response Error:", await response.json());
@@ -110,7 +113,9 @@ export function AddStudentDialog({
 
   const fetchDepartments = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/departments/");
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/departments/`
+      );
       const data = await response.json(); // Correct invocation of .json()
       console.log(data);
       setDepartments(data); // Set the fetched data to state

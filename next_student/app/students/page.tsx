@@ -23,11 +23,15 @@ const Students = async () => {
 };
 
 async function fetchStudents(): Promise<Student[]> {
-  const response = await fetch("http://127.0.0.1:8000/api/students/");
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/students/`
+  );
   return response.json();
 }
 async function fetchCourses(): Promise<Course[]> {
-  const response = await fetch("http://127.0.0.1:8000/api/courses/");
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/courses/`
+  );
   return response.json();
 }
 

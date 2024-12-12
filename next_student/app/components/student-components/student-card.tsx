@@ -30,6 +30,7 @@ export default function StudentCard({ courses }: StudentCardProps) {
   const [imageFile, setImageFile] = useState<File | null>(null); // State for image file
 
   useEffect(() => {
+    console.log("environment", process.env.NEXT_PUBLIC_API_URL);
     setCourses(courses);
   }, [courses, setCourses]);
 
@@ -46,7 +47,7 @@ export default function StudentCard({ courses }: StudentCardProps) {
 
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/api/students/${selectedRow.id}/`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/students/${selectedRow.id}/`,
         {
           method: "PATCH",
           body: formData, // Send FormData with the image
@@ -91,7 +92,7 @@ export default function StudentCard({ courses }: StudentCardProps) {
 
       // Make an API call to update the student's date of birth
       const response = await fetch(
-        `http://127.0.0.1:8000/api/students/${selectedRow.id}/`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/students/${selectedRow.id}/`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
@@ -126,7 +127,7 @@ export default function StudentCard({ courses }: StudentCardProps) {
       if (selectedRow == null) return; // Ensure selectedRow is not null
 
       const response = await fetch(
-        `http://127.0.0.1:8000/api/enrollment/delete-by-student-and-course/`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/enrollment/delete-by-student-and-course/`,
         {
           method: "DELETE", // Change method to DELETE
           headers: { "Content-Type": "application/json" },
@@ -160,11 +161,14 @@ export default function StudentCard({ courses }: StudentCardProps) {
     try {
       if (selectedRow == null) return; // Ensure selectedRow is not null
 
-      const response = await fetch(`http://127.0.0.1:8000/api/enrollment/`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ student: selectedRow.id, course: courseId }), // Send studentId and courseId
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/enrollment/`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ student: selectedRow.id, course: courseId }), // Send studentId and courseId
+        }
+      );
 
       if (response.ok) {
         const newEnrollment = await response.json(); // Parse the response to get the enrollment info
@@ -172,7 +176,7 @@ export default function StudentCard({ courses }: StudentCardProps) {
         const enrolledCourseId = newEnrollment.course;
 
         const newCourseResponse = await fetch(
-          `http://127.0.0.1:8000/api/courses/${enrolledCourseId}`
+          `${process.env.NEXT_PUBLIC_API_URL}/api/courses/${enrolledCourseId}`
         );
         const newCourse = await newCourseResponse.json();
 
@@ -199,7 +203,7 @@ export default function StudentCard({ courses }: StudentCardProps) {
       if (selectedRow == null) return;
       // Make an API call to update the student's CNIC
       const response = await fetch(
-        `http://127.0.0.1:8000/api/students/${selectedRow.id}/`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/students/${selectedRow.id}/`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },

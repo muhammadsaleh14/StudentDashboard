@@ -5,7 +5,9 @@ import { Course, Student } from "@/app/interfaces/models";
 import { AddStudentDialog } from "@/app/components/student-components/AddStudentDialog";
 
 import Overview from "@/app/components/Overview";
+import { env } from "process";
 const Dashboard = async () => {
+  console.log("next API_URL:", process.env.NEXT_PUBLIC_API_URL);
   const students: Student[] = await fetchStudents();
   const courses: Course[] = await fetchCourses();
   return (
@@ -28,11 +30,15 @@ const Dashboard = async () => {
 };
 
 async function fetchStudents(): Promise<Student[]> {
-  const response = await fetch("http://127.0.0.1:8000/api/students/");
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/students/`
+  );
   return response.json();
 }
 async function fetchCourses(): Promise<Course[]> {
-  const response = await fetch("http://127.0.0.1:8000/api/courses/");
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/courses/`
+  );
   return response.json();
 }
 
