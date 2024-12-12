@@ -707,11 +707,17 @@ video {
 .ml-1 {
   margin-left: 0.25rem;
 }
+.ml-10 {
+  margin-left: 2.5rem;
+}
 .ml-2 {
   margin-left: 0.5rem;
 }
 .ml-auto {
   margin-left: auto;
+}
+.mr-10 {
+  margin-right: 2.5rem;
 }
 .mr-2 {
   margin-right: 0.5rem;
@@ -1205,6 +1211,9 @@ video {
 }
 .p-2 {
   padding: 0.5rem;
+}
+.p-20 {
+  padding: 5rem;
 }
 .p-3 {
   padding: 0.75rem;

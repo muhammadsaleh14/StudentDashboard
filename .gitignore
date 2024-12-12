@@ -1,4 +1,46 @@
 venv
 next_student/node_modules
+
+# Next.js build output
 next_student/.next/
 next_student/out/
+
+# Production
+next_student/build/
+next_student/public/static/
+
+# Dependency directories
+next_student/pnpm-lock.yaml
+next_student/yarn.lock
+next_student/package-lock.json
+
+# IDE and Editor directories
+next_student/.idea/
+next_student/.vscode/
+next_student/*.swp
+next_student/.DS_Store
+
+# Logs
+next_student/npm-debug.log*
+next_student/yarn-debug.log*
+next_student/yarn-error.log*
+
+# Environment variables
+next_student/.env
+next_student/.env.local
+next_student/.env.development.local
+next_student/.env.test.local
+next_student/.env.production.local
+
+# Next.js custom server
+next_student/server/
+
+# Misc
+next_student/*.tgz
+next_student/*.log
+
+# Mac system files
+next_student/.DS_Store
+
+# Windows system files
+next_student/Thumbs.db
